@@ -101,17 +101,18 @@ def main():
     (...)
 
     Logika biznesowa polega na polecaniu M konkretnych produktów (productCode) dla danego klienta (customerNumber) biorąc
-    pod uwagę K jego ostatnich zakupów. Wykorzystuje ona ideę algorytmy klasyfikacji KNN.
-    Dla każdej z K ostatnich transakcji wyliczamy polecany produkt (transakcje najbardziej podobną do tej którą rozważamy).
-    Obliczamy sumę mnogościową "Poleceń" i wybieramy 3 najbardziej polecane produkty.
+    pod uwagę K jego ostatnich zakupów. Wykorzystuje ona ideę algorytmu klasyfikacji KNN.
+    Dla każdej z K ostatnich transakcji wyliczamy polecany produkt (transakcje najbardziej podobną do tej którą rozważamy - z pewnymi wyjątkami).
+    Obliczamy sumę mnogościową "Poleceń" i wybieramy M najbardziej polecane produkty.
     """
 
     klienci = pobierz_klientow()
     K = 1
+    M = 3
     for id_klienta in klienci[:20]:
         print "Klient %d"%id_klienta
         print "Polecane: "
-        print znajdz_polecane_dla_k_ostatnich(K, id_klienta).most_common(3)
+        print znajdz_polecane_dla_k_ostatnich(K, id_klienta).most_common(M)
         print
 
 def znajdz_polecane_dla_k_ostatnich(K, id_klienta):
