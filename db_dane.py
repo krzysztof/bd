@@ -25,6 +25,19 @@ def pobierz_ostatnie_k_zakupow(K, klient_id):
     """
     Funkcja zwracajaca ostatnie K zakupow od klienta o customerNumber==klient_id
     """
+    # dokladnie taka sama kolejnosc danych, ale:
+    # 1. Tylko dla customerNumber == klient_id
+    # 2. K najnowszych rekordow wzgledem daty o.orderDate
     conn = daj_polaczenie()
     c = conn.cursor()
+
+    c.execute("SELECT c.customerNumber, c.creditLimit, p.productCode, p.productLine, p.productScale, p.productVendor, p.buyPrice \
+              FROM Customers c, Orders o, OrderDetails d, Products p WHERE c.customerNumber = %s\
+              and c.customerNumber = o.customerNumber and o.orderNumber = d.orderNumber and p.productCode = d.productCode\
+              order by o.orderDate DESC" % (klient_id))
+
+    dane = []
+    for line in c.fetchall():
+        dane.append(list(line))
+    return dane[:K]
 

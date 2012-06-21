@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from db_dane import pobierz_dane, pobierz_klientow
+from db_dane import pobierz_dane, pobierz_klientow, pobierz_ostatnie_k_zakupow
 from klasyfikacja import KNN
+from collections import Counter
 
 DEBUG = True
 
@@ -92,28 +93,71 @@ def wykryj_brakujace_dane(dane):
                     brakujace_krotki_count += 1
     return brakujace_krotki_count
 
-def znajdz_najczesciej_kupowany(dane, klient):
-    pass
-
 def main():
     """
     Przykladowa krotka to:
-    (id_klienta, zdolnosc kredytowa, id_produktu, typ_produktu, skala_zabawki, firma, cena)
-    (379L, 70700.0, 'S18_2957', 'Vintage Cars', '1:18', 'Min Lin Diecast', 34.35)
+    (customerNumber,    creditLimit,    productCode,   productLine,     productScale,   productVendor,      buyPrice)
+    (379L,              70700.0,        'S18_2957',    'Vintage Cars', '1:18',          'Min Lin Diecast',  34.35)
+    (...)
 
-    Logika biznesowa polega na polecaniu konkretnych produktów (id_produktu) dla danego klienta (id_klienta)
+    Logika biznesowa polega na polecaniu M konkretnych produktów (productCode) dla danego klienta (customerNumber) biorąc
+    pod uwagę K jego ostatnich zakupów. Wykorzystuje ona ideę algorytmy klasyfikacji KNN.
+    Dla każdej z K ostatnich transakcji wyliczamy polecany produkt (transakcje najbardziej podobną do tej którą rozważamy).
+    Obliczamy sumę mnogościową "Poleceń" i wybieramy 3 najbardziej polecane produkty.
     """
-    dane = pobierz_dane()
+
     klienci = pobierz_klientow()
-    print klienci
-    for d in dane:
-        print d
+    K = 1
+    for id_klienta in klienci[:20]:
+        print "Klient %d"%id_klienta
+        print "Polecane: "
+        print znajdz_polecane_dla_k_ostatnich(K, id_klienta).most_common(3)
+        print
+
+def znajdz_polecane_dla_k_ostatnich(K, id_klienta):
+    dane = pobierz_dane()
+    dane = przygotuj_dane(dane, [1,6], 3, [3,4,5])
+    k_sasiadow = 20
+    kol_decyz = 2
+    # indeksy sa to zmienne kolumn brane pod uwagę, w KNN
+    # productLine, productScale, productVendor, buyPrice
+    indeksy = [3,4,5,6]
+    ostatnie = pobierz_ostatnie_k_zakupow(10, id_klienta)
+    ostatnie = przygotuj_dane(ostatnie, [1,6], 3, [3,4,5])
+
+    polecenia = Counter()
+    for transakcja in ostatnie:
+        pol = KNN(dane, k_sasiadow, transakcja, kol_decyz, indeksy)
+        polecenia += pol
+    return polecenia
+
+def test_K_ostatnich():
+    for id in [125]:
+        ostatnie = pobierz_ostatnie_k_zakupow(8, id)
+        print len(ostatnie)
+        for o in ostatnie:
+            print o
+
+def test_KNM():
+    dane = pobierz_dane()
+    dane = przygotuj_dane(dane, [1,6], 3, [3,4,5])
+
+    ostatnie = pobierz_ostatnie_k_zakupow(1, 141L)
+    ostatnie = przygotuj_dane(ostatnie, [1,6], 3, [3,4,5])
+
+    transakcja = ostatnie[0]
+
+    k_sasiadow = 20
+    kol_decyz = 2
+    indeksy = [3,4,5,6]
+    pol = KNN(dane, k_sasiadow, transakcja, kol_decyz, indeksy)
+    print pol
 
 def test():
     dane = pobierz_dane()
     for d in dane:
         print d
-    print 'Brakujace krotki:', wykryj_brakujace_dane(dane)
+    #print 'Brakujace krotki:', wykryj_brakujace_dane(dane)
 
 def test2():
     #a = ['ala', 'kot', 'ala', 'abc', 'abc']
@@ -135,17 +179,28 @@ def test3():
     for d in dane:
         print d
 
+def wygeneruj_dla_wszystkich():
+    pass
+
+def test_wypisz_klientow():
+    klienci = pobierz_klientow()
+    for k in klienci:
+        print k
+
 def test4():
     dane = pobierz_dane()
     dane = przygotuj_dane(dane, [1,6], 3, [3,4,5])
     K = 30
-    wiersz_do_klas = 2900
     kol_decyz = 2
-    indeksy = [1,3,4,5,6]
+    indeksy = [3,4,5,6]
 
     print KNN(dane, K, wiersz_do_klas, kol_decyz, indeksy)
 
 if __name__ == "__main__":
-    #main()
-    test4()
+    #test_KNM()
+    main()
+    #test_wypisz_klientow()
+    #test4()
+    #test()
+    #test_K_ostatnich()
 
