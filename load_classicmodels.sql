@@ -38,38 +38,38 @@ DELETE FROM Products;
 
 # Load records into the tables. There should be no warnings.
 
-LOAD DATA LOCAL INFILE '../datafiles/customers.txt' INTO TABLE Customers
-          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE './datafiles/Customers.txt' INTO TABLE Customers
+          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
 
 SHOW WARNINGS LIMIT 10;
 
-LOAD DATA LOCAL INFILE '../datafiles/employees.txt' INTO TABLE Employees
-          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE './datafiles/Employees.txt' INTO TABLE Employees
+          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
 
 SHOW WARNINGS LIMIT 10;
 
-LOAD DATA LOCAL INFILE '../datafiles/offices.txt' INTO TABLE Offices
-          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE './datafiles/Offices.txt' INTO TABLE Offices
+          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
 
 SHOW WARNINGS LIMIT 10;
 
-LOAD DATA LOCAL INFILE '../datafiles/orderdetails.txt' INTO TABLE OrderDetails
-          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE './datafiles/OrderDetails.txt' INTO TABLE OrderDetails
+          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
 
 SHOW WARNINGS LIMIT 10;
 
-LOAD DATA LOCAL INFILE '../datafiles/orders.txt' INTO TABLE Orders
-          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE './datafiles/Orders.txt' INTO TABLE Orders
+          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
 
 SHOW WARNINGS LIMIT 10;
 
-LOAD DATA LOCAL INFILE '../datafiles/payments.txt' INTO TABLE Payments
-          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE './datafiles/Payments.txt' INTO TABLE Payments
+          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
 
 SHOW WARNINGS LIMIT 10;
 
-LOAD DATA LOCAL INFILE '../datafiles/products.txt' INTO TABLE Products
-          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\r\n';
+LOAD DATA LOCAL INFILE './datafiles/Products.txt' INTO TABLE Products
+          FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
 
 
 
