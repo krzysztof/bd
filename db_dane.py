@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import MySQLdb
 
 def daj_polaczenie(host='localhost', user='root', password='', baza='bazy'):
@@ -21,6 +24,8 @@ def pobierz_klientow():
     c.execute("SELECT customerNumber from Customers")
     return [k[0] for k in c.fetchall()]
 
+
+
 def pobierz_ostatnie_k_zakupow(K, klient_id):
     """
     Funkcja zwracajaca ostatnie K zakupow od klienta o customerNumber==klient_id
@@ -40,4 +45,17 @@ def pobierz_ostatnie_k_zakupow(K, klient_id):
     for line in c.fetchall():
         dane.append(list(line))
     return dane[:K]
+
+def pobierz_info_produktu(produkt_id):
+    """
+    Zwraca informacje o produkcie dla celow wyświetlania.
+    """
+
+    conn = daj_polaczenie()
+    c = conn.cursor()
+
+    c.execute("SELECT p.productCode, p.productLine, p.productScale, p.productVendor,p.productDescription, p.buyPrice \
+              FROM Products p WHERE p.productCode = '%s'" % (produkt_id))
+
+    return c.fetchall()[0]
 
